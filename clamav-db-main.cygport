@@ -1,5 +1,5 @@
 NAME="clamav-db-main"
-VERSION=57
+VERSION=58
 RELEASE=1
 CATEGORY="Utils"
 SUMMARY="ClamAV virus definitions (main database)"
@@ -15,6 +15,16 @@ SRC_DIR=.
 ARCH=noarch
 
 OBSOLETES="clamav-db"
+
+CYGPORT_USE_UNSTABLE_API=1
+src_unpack_hook() {
+	local mainv=$(sigtool --info main-*.cvd 2>/dev/null | grep Version: | cut -d' ' -f2)
+
+	if [ ${mainv} != ${VERSION} ]
+	then
+		error "Database version mismatch: ${mainv} != ${VERSION}"
+	fi
+}
 
 src_compile() { :; }
 
